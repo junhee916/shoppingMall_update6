@@ -1,21 +1,47 @@
 const express = require('express')
+const productModel = require('../models/product')
 const router = express.Router()
 
 router.get("/", (req, res) => {
-    res.json({
-        message : "get product"
-    })
+    // res.json({
+    //     message : "get product"
+    // })
+    productModel
+        .find()
+        .then(products => {
+            res.json({
+                msg : "get total products",
+                count : products.length,
+                productInfo : products
+            })
+
+        })
+        .catch(err => {
+            res.status(500).json({
+                msg : err.message
+            })
+        })
 })
 
 router.post("/", (req, res) => {
-    const newProdcut = {
+    const newProdcut = new productModel({
         name : req.body.productName,
         price : req.body.productPrice
-    }
-    res.json({
-        message : "register product",
-        prodcutInfo : newProdcut
     })
+
+    newProdcut
+        .save()
+        .then(product => {
+            res.json({
+                msg : "saved product",
+                productInfo : product
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                msg : err.message
+            })
+        })
 })
 
 router.patch("/", (req, res) => {
