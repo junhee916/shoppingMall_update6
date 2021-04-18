@@ -68,10 +68,27 @@ router.post("/", (req, res) => {
 })
 
 // update product
-router.patch("/", (req, res) => {
-    res.json({
-        message : "updated product"
-    })
+router.patch("/:productId", (req, res) => {
+    const id = req.params.productId
+
+    const updateOps = {}
+
+    for (const ops of req.body){
+        updateOps[ops.propName] = ops.value
+    }
+
+    productModel
+        .findByIdAndUpdate(id, { $set : updateOps })
+        .then(() => {
+            res.json({
+                msg : "updated product by " + id
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                msg : err.message
+            })
+        })
 })
 
 //delete product
@@ -113,4 +130,6 @@ router.delete("/:productId", (req, res) => {
         })
 
 })
+
+
 module.exports = router
