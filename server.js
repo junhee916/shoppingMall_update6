@@ -5,8 +5,15 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 
+
+// database connected
+require('./config/database')
+
+
 const productRouter = require('./router/product')
 const orderRouter = require('./router/order')
+
+
 
 //middleware
 app.use(bodyParser.json())
