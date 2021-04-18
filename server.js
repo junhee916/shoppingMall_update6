@@ -29,4 +29,4 @@ app.use('/order', orderRouter)
 
 const PORT = process.env.PORT || 7000
 
-app.listen(PORT, console.log("서버 실행 "))
+app.listen(PORT, console.log("server connected ... "))
