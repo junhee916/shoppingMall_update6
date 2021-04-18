@@ -2,6 +2,8 @@ const express = require('express')
 const productModel = require('../models/product')
 const router = express.Router()
 
+
+// total product get
 router.get("/", (req, res) => {
     // res.json({
     //     message : "get product"
@@ -23,6 +25,27 @@ router.get("/", (req, res) => {
         })
 })
 
+
+// detail product get
+router.get("/:productId", (req, res) => {
+    const id = req.params.productId
+    productModel
+        .findById(id)
+        .then(product => {
+            res.json({
+                msg : "get product by " + id,
+                productInfo : product
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                msg : err.message
+            })
+        })
+})
+
+
+// register product
 router.post("/", (req, res) => {
     const newProdcut = new productModel({
         name : req.body.productName,
@@ -44,16 +67,50 @@ router.post("/", (req, res) => {
         })
 })
 
+// update product
 router.patch("/", (req, res) => {
     res.json({
         message : "updated product"
     })
 })
 
+//delete product
 router.delete("/", (req, res) => {
-    res.json({
-        message : "deleted product"
-    })
+    // res.json({
+    //     message : "deleted product"
+    // })
+
+    productModel
+        .remove()
+        .then(() => {
+            res.json({
+                msg : "deleted products"
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                msg : err.message
+            })
+        })
 })
 
+//detail delete product
+router.delete("/:productId", (req, res) => {
+
+    const id = req.params.productId
+
+    productModel
+        .findByIdAndRemove(id)
+        .then(() => {
+            res.json({
+                msg : "deleted productId by " + id
+            })
+        })
+        .catch(err => {
+            res.status(500).json({
+                msg : err.message
+            })
+        })
+
+})
 module.exports = router
